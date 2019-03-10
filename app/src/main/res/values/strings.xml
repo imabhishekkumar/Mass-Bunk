@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Enroll Me</string>
+    <string name="signout">Sign out</string>
 </resources>

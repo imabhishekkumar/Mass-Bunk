@@ -20,7 +20,6 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
-    Button studentBtn, teacherBtn;
     FirebaseDatabase firebaseDatabase;
     FirebaseUser mUser;
     DatabaseReference databaseReference;
@@ -36,23 +35,21 @@ public class MainActivity extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
 
         databaseReference = firebaseDatabase.getReference();
-        studentBtn = findViewById(R.id.studentBtn);
-        teacherBtn = findViewById(R.id.teacherBtn);
-        progressDialog= new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this);
+        if (mUser!= null) {
         progressDialog.setMessage("Verifying");
         progressDialog.show();
 
-        databaseReference.addListenerForSingleValueEvent (new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child("students").child(mUser.getUid()).exists()){
-                    isStudent=true;
+                if (dataSnapshot.child("students").child(mUser.getUid()).exists()) {
+                    isStudent = true;
                     Intent intent = new Intent(MainActivity.this, ReaderActivity.class);
                     startActivity(intent);
                     progressDialog.dismiss();
-                }
-                else if (dataSnapshot.child("teachers").child(mUser.getUid()).exists()){
-                    isTeacher=true;
+                } else if (dataSnapshot.child("teachers").child(mUser.getUid()).exists()) {
+                    isTeacher = true;
                     Intent intent = new Intent(MainActivity.this, GeneratorActivity.class);
                     startActivity(intent);
                     progressDialog.dismiss();
@@ -65,30 +62,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        studentBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                intent.putExtra("type", "students");
-                startActivity(intent);
-            }
-        });
-
-        teacherBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                intent.putExtra("type", "teachers");
-                startActivity(intent);
-            }
-        });
+    }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (mAuth == null) {
+        if (mUser == null) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
         }
+
     }
 }
