@@ -71,27 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
         progressDialog.setMessage("Verifying");
         progressDialog.show();
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child("students").child(mUser.getUid()).exists()) {
-                    isStudent = true;
-                    Intent intent = new Intent(LoginActivity.this, ReaderActivity.class);
-                    startActivity(intent);
-                    progressDialog.dismiss();
-                } else if (dataSnapshot.child("teachers").child(mUser.getUid()).exists()) {
-                    isTeacher = true;
-                    Intent intent = new Intent(LoginActivity.this, GeneratorActivity.class);
-                    startActivity(intent);
-                    progressDialog.dismiss();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
     }
 
     @Override
